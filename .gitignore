@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Model files (download separately)
+models/
+*.engine
+*.onnx
+*.gguf
+*.pt
+*.pth
+*.bin
+
+# Logs & data
+logs/
+*.log
+*.db
+*.db-shm
+*.db-wal
+snapshots/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Node
+node_modules/
+
+# Agent
+.agent/
+.gemini/
