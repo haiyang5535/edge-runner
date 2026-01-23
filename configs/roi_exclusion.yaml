@@ -1,0 +1,44 @@
+# ROI Exclusion Zones Configuration
+# ==================================
+#
+# Defines static zones where specific classes should NOT be detected.
+# Used to eliminate false positives from static objects (cargo, shelving).
+#
+# Uses BOTTOM_CENTER (footpoint) anchor for consistency with:
+# - Supervision PolygonZone
+# - Ground-plane BEV projection
+# - Proximity distance calculation
+#
+# All coordinates are normalized (0-1) for resolution independence.
+
+exclusion_zones:
+  # Left corner - static yellow cargo area
+  - id: corner_left
+    polygon:
+      - [0.0, 0.75]
+      - [0.12, 0.75]
+      - [0.12, 1.0]
+      - [0.0, 1.0]
+    target_classes: ["forklift"]
+    description: "Left corner - static cargo, eliminate forklift FPs"
+
+  # Right corner - static yellow cargo area
+  - id: corner_right
+    polygon:
+      - [0.88, 0.75]
+      - [1.0, 0.75]
+      - [1.0, 1.0]
+      - [0.88, 1.0]
+    target_classes: ["forklift"]
+    description: "Right corner - static cargo, eliminate forklift FPs"
+
+  # Upper region - ceiling/lighting fixtures (not ground level)
+  # Forklifts should not be detected in upper portion of frame
+  - id: ceiling_zone
+    polygon:
+      - [0.0, 0.0]
+      - [1.0, 0.0]
+      - [1.0, 0.15]
+      - [0.0, 0.15]
+    target_classes: ["forklift", "person"]
+    description: "Ceiling area - no ground-level objects"

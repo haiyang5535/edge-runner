@@ -1,0 +1,8 @@
+root   ::= object
+object ::= "{" ws pair ("," ws pair)* "}" ws
+pair   ::= string ":" ws value
+string ::= "\"" [^"]* "\""
+value  ::= object | array | string | "true" | "false" | "null" | number
+array  ::= "[" ws (value ("," ws value)*)? "]" ws
+number ::= [0-9]+ ("." [0-9]*)?
+ws     ::= [ \t\n]*

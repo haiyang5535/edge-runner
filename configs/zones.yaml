@@ -1,0 +1,120 @@
+# EdgeRunner Safety Zones Configuration
+# ======================================
+#
+# All coordinates are normalized (0-1) for resolution independence.
+# Coordinate system: (0,0) = top-left, (1,1) = bottom-right
+#
+# Zone Types:
+#   - RESTRICTED: No person should be present (e.g., forklift lanes)
+#   - VEHICLE_LANE: Designated for vehicles, pedestrians = danger
+#   - FLOW: Traffic flow areas with occupancy limits
+#   - SAFE: Designated safe zones (no alerts)
+#
+# Rule Types:
+#   - PERSON_PRESENCE: Person detected in zone
+#   - OCCUPANCY: Any target exceeds dwell time
+#   - SPEED_LIMIT: (future) Movement speed threshold
+#
+# Color Palette: Modern muted colors (BGR format)
+# - Avoid pure primary colors (too harsh)
+# - Use HSL-adjusted tones for visual comfort
+
+zones:
+  # Forklift Lane - Bottom center strip (NOT overlapping with vehicle_lane)
+  # High priority: People should not be in forklift lanes
+  - id: forklift_lane
+    type: RESTRICTED
+    display_name: "Forklift Lane"
+    color: [80, 100, 200]  # Muted coral/salmon (soft red)
+    polygon:
+      - [0.20, 0.72]  # top-left
+      - [0.80, 0.72]  # top-right
+      - [0.80, 0.88]  # bottom-right
+      - [0.20, 0.88]  # bottom-left
+    rules:
+      - type: PERSON_PRESENCE
+        max_dwell_seconds: 5
+        severity: HIGH
+        target_classes: ["person"]
+    enabled: true
+
+  # Main Aisle - Center corridor (upper area)
+  # People can pass through but shouldn't linger
+  - id: main_aisle
+    type: FLOW
+    display_name: "Main Aisle"
+    color: [60, 180, 220]  # Soft amber/gold
+    polygon:
+      - [0.25, 0.08]
+      - [0.75, 0.08]
+      - [0.75, 0.50]
+      - [0.25, 0.50]
+    rules:
+      - type: OCCUPANCY
+        max_dwell_seconds: 30
+        severity: MEDIUM
+        target_classes: ["person"]
+    enabled: true  # Enabled for demo coverage
+
+  # Loading Dock Entry - Left side strip
+  - id: loading_dock
+    type: RESTRICTED
+    display_name: "Loading Dock"
+    color: [180, 120, 200]  # Muted lavender/purple
+    polygon:
+      - [0.0, 0.25]
+      - [0.12, 0.25]
+      - [0.12, 0.60]
+      - [0.0, 0.60]
+    rules:
+      - type: PERSON_PRESENCE
+        max_dwell_seconds: 10
+        severity: MEDIUM
+        target_classes: ["person"]
+    enabled: true  # Enabled for demo coverage
+
+  # Equipment Storage - Right side strip
+  - id: equipment_storage
+    type: RESTRICTED
+    display_name: "Equipment Storage"
+    color: [200, 160, 100]  # Muted steel blue
+    polygon:
+      - [0.88, 0.25]
+      - [1.0, 0.25]
+      - [1.0, 0.60]
+      - [0.88, 0.60]
+    rules:
+      - type: PERSON_PRESENCE
+        max_dwell_seconds: 15
+        severity: LOW
+        target_classes: ["person"]
+    enabled: true
+
+  # Vehicle Lane - Disabled by default (was causing overlap issues)
+  # Re-enable only if you need a separate vehicle detection zone
+  - id: vehicle_lane
+    type: VEHICLE_LANE
+    display_name: "Vehicle Lane"
+    color: [100, 140, 180]  # Muted tan/brown
+    polygon:
+      - [0.0, 0.90]
+      - [1.0, 0.90]
+      - [1.0, 1.0]
+      - [0.0, 1.0]
+    rules:
+      - type: PERSON_PRESENCE
+        max_dwell_seconds: 3
+        severity: HIGH
+        target_classes: ["person"]
+    enabled: true  # Enabled for demo coverage
+
+# Global settings
+settings:
+  # Default frame size for preview (actual scaling is runtime)
+  default_frame_size: [640, 480]
+  
+  # How often to cleanup stale tracks (seconds)
+  stale_track_timeout: 2.0
+  
+  # Minimum confidence for detection to count
+  min_confidence: 0.5

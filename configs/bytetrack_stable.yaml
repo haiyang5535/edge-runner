@@ -1,0 +1,11 @@
+# Custom ByteTrack config for stable ID tracking
+# Ultralytics AGPL-3.0 License - https://ultralytics.com/license
+# Optimized for: Industrial safety monitoring, occlusion handling, ID persistence
+
+tracker_type: bytetrack
+track_high_thresh: 0.2      # Lower than default (0.25) - fewer missed detections
+track_low_thresh: 0.05      # Lower than default (0.1) - recover weak detections  
+new_track_thresh: 0.3       # Higher than default (0.25) - reduce false new tracks
+track_buffer: 60            # 2x default (30) - keep lost tracks 2 seconds @ 30fps
+match_thresh: 0.85          # Slightly higher (0.8) - more forgiving IoU match
+fuse_score: True            # Fuse detection score with motion/IoU for matching

@@ -1,0 +1,51 @@
+# Proximity Detection Configuration
+# ==================================
+#
+# Configuration for pedestrian-forklift proximity detection.
+# Supports both pixel-based (interim) and BEV (production) modes.
+
+# ============================================================
+# Distance Thresholds
+# ============================================================
+
+# Pixel-based thresholds (calibrated for 1080p)
+# Used when BEV calibration is not available
+pixel_thresholds:
+  danger_distance_px: 200       # Immediate danger zone
+  warning_distance_px: 350      # Caution zone
+
+# BEV (meters) thresholds (recommended for production)
+# Requires camera calibration via tools/calibrate_floor.py
+bev_thresholds:
+  danger_distance_m: 2.0        # Immediate danger: <2 meters
+  warning_distance_m: 4.0       # Caution zone: 2-4 meters
+
+# ============================================================
+# Y-Scaled Distance (Interim Solution)
+# ============================================================
+# Accounts for perspective without full BEV calibration.
+# Objects lower in frame (higher y) are closer to camera.
+
+y_scaled:
+  enabled: true
+  base_threshold: 150           # Pixels at y_ratio=0.5
+  scale_range: [0.5, 1.5]       # Scale factor range
+
+# ============================================================
+# Time-to-Collision (TTC) - SOTA Feature
+# ============================================================
+# Detects danger BEFORE objects are close (proactive alert)
+
+ttc:
+  enabled: false                # Enable when velocity tracking is stable
+  danger_ttc_sec: 3.0           # Alert if collision in <3 seconds
+  velocity_ema_alpha: 0.3       # EMA smoothing for velocity estimation
+
+# ============================================================
+# Alert Behavior
+# ============================================================
+
+alerts:
+  cooldown_sec: 5.0             # Minimum time between alerts for same pair
+  persist_frames: 10            # Keep alert active for N frames after danger clears
+  require_stable_detection: true # Only alert for stable (smoothed) detections

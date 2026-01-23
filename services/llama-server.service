@@ -1,0 +1,31 @@
+[Unit]
+Description=llama.cpp VLM Server for EdgeRunner
+After=network.target
+
+[Service]
+Type=simple
+User=edge
+Group=edge
+
+ExecStart=/opt/llama.cpp/build/bin/llama-server \
+    -m /opt/models/vlm/model-Q4_K_M.gguf \
+    --mmproj /opt/models/vlm/mmproj-F16.gguf \
+    --host 127.0.0.1 \
+    --port 8080 \
+    --gpu-layers 99 \
+    --ctx-size 2048 \
+    --batch-size 512 \
+    --n-predict 256
+
+Restart=always
+RestartSec=3
+TimeoutStartSec=60
+
+Environment=CUDA_VISIBLE_DEVICES=0
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=llama-server
+
+[Install]
+WantedBy=multi-user.target

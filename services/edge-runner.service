@@ -1,0 +1,29 @@
+[Unit]
+Description=EdgeRunner Vision AI System
+After=llama-server.service network.target
+Wants=llama-server.service
+
+[Service]
+Type=simple
+User=edge
+Group=edge
+
+WorkingDirectory=/opt/edge-runner
+
+ExecStart=/opt/edge-runner/venv/bin/python -m src.main --quiet
+
+Restart=always
+RestartSec=5
+TimeoutStartSec=120
+
+Environment=PYTHONUNBUFFERED=1
+Environment=DISPLAY=:0
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=edge-runner
+
+Nice=-5
+
+[Install]
+WantedBy=multi-user.target
