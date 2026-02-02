@@ -1,0 +1,42 @@
+[project]
+name = "edge-runner"
+version = "1.0.0"
+description = "Real-time Edge AI Vision System on NVIDIA Jetson — YOLO + VLM with constrained decoding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Nosis AI" }
+]
+keywords = ["edge-ai", "yolo", "vlm", "jetson", "tensorrt", "computer-vision", "real-time"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3.10",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "opencv-python>=4.8.0",
+    "ultralytics>=8.1.0",
+    "supervision>=0.18.0",
+    "pydantic>=2.5.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
