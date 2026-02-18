@@ -4,7 +4,7 @@
 
 EdgeRunner is a dual-thread computer vision system that runs YOLO object detection and Vision Language Model (VLM) inference entirely on edge hardware — no cloud, no latency, no connectivity dependency.
 
-Built by [Nosis AI](https://github.com/NosisAI) for industrial safety and autonomous monitoring applications.
+Built by [Machina AI](https://github.com/MachinaEdgeAI) for industrial safety and autonomous monitoring applications.
 
 ---
 
